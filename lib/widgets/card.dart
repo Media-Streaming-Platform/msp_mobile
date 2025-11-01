@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 
 class VideoThumbnailCard extends StatelessWidget {
   final String thumbnailUrl;
-  final String duration;
   final String title;
   final String subtitle;
-  final String avatarUrl;
+ // final String avatarUrl;
   final double? width;
   final VoidCallback? onTap;
 
   const VideoThumbnailCard({
     Key? key,
     required this.thumbnailUrl,
-    required this.duration,
     required this.title,
     required this.subtitle,
-    required this.avatarUrl,
+    //required this.avatarUrl,
     this.width,
     this.onTap,
   }) : super(key: key);
@@ -73,14 +71,14 @@ class VideoThumbnailCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Text(
-                        duration,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      // child: Text(
+                      //   duration,
+                      //   style: const TextStyle(
+                      //     color: Colors.white,
+                      //     fontSize: 12,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
                     ),
                   ),
                 ],

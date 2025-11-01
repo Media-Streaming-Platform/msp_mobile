@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:msp_mobile/models/media.dart';
 import 'package:msp_mobile/widgets/card.dart';
 
 class VideoListPage extends StatefulWidget {
   final String title;
-  final List<Map<String, dynamic>> videos;
+  final List<Media> videos;
 
   const VideoListPage({
     Key? key,
@@ -38,14 +39,14 @@ class _VideoListPageState extends State<VideoListPage> {
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
           child: VideoThumbnailCard(
-            thumbnailUrl: video['thumbnailUrl'],
-            duration: video['duration'],
-            title: video['title'],
-            subtitle: video['subtitle'],
-            avatarUrl: video['avatarUrl'],
+            thumbnailUrl: video.thumbnail!,
+           // duration: video['duration'],
+            title: video.title,
+            subtitle: video.description!,
+           // avatarUrl: video['avatarUrl'],
             onTap: () {
               // Handle video tap
-              print('Tapped on: ${video['title']}');
+              print('Tapped on: ${video.title}');
             },
           ),
         );
