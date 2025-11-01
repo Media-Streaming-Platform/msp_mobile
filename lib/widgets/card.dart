@@ -26,7 +26,8 @@ class VideoThumbnailCard extends StatelessWidget {
       width: width,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Card(
-        elevation: 1,
+        elevation: 2,
+        color: Theme.of(context).cardTheme.color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -69,7 +70,7 @@ class VideoThumbnailCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.8),
+                        color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(

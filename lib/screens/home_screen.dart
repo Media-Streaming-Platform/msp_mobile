@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:msp_mobile/screens/video_list_page.dart';
 import 'package:msp_mobile/widgets/card.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -87,9 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
+  icon: const Icon(Icons.brightness_6),
+  onPressed: () {
+    ThemeProvider.controllerOf(context).nextTheme();
+  },
+),
           // IconButton(
           //   icon: const Icon(Icons.notifications_outlined),
           //   onPressed: () {},
