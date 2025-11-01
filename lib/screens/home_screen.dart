@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               child: const Icon(
-                Icons.tv_rounded,
+                Icons.wifi_tethering,
                 color: Colors.white,
                 size: 32,
               ),
