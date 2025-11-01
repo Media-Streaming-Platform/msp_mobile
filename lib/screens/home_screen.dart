@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:msp_mobile/screens/video-player-page.dart';
 import 'package:msp_mobile/screens/video_list_page.dart';
 import 'package:msp_mobile/widgets/card.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -179,16 +180,27 @@ class _MyHomePageState extends State<MyHomePage> {
               return SizedBox(
                 width: 280,
                 child: VideoThumbnailCard(
-                  thumbnailUrl: video['thumbnailUrl'],
-                  duration: video['duration'],
-                  title: video['title'],
-                  subtitle: video['subtitle'],
-                  avatarUrl: video['avatarUrl'],
-                  onTap: () {
-                    // Handle video tap
-                    print('Tapped on: ${video['title']}');
-                  },
-                ),
+  thumbnailUrl: video['thumbnailUrl'],
+  duration: video['duration'],
+  title: video['title'],
+  subtitle: video['subtitle'],
+  avatarUrl: video['avatarUrl'],
+  onTap: () {
+    // Navigate to VideoPlayerPage when video is tapped
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(
+          title: video['title'],
+          subtitle: video['subtitle'],
+          thumbnailUrl: video['thumbnailUrl'],
+          // Add videoUrl to your video data structure
+          videoUrl: video['videoUrl'] ?? 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        ),
+      ),
+    );
+  },
+),
               );
             },
           ),
