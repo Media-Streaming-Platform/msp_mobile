@@ -1,6 +1,7 @@
 // [file name]: home_screen.dart
 // [file content begin]
 import 'package:flutter/material.dart';
+import 'package:msp_mobile/screens/audio_player.dart';
 import 'package:msp_mobile/screens/video-player-page.dart';
 import 'package:msp_mobile/screens/video_list_page.dart';
 import 'package:msp_mobile/widgets/card.dart';
@@ -89,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       'title': 'Flutter Podcast: State Management',
       'subtitle': 'Flutter Dev Channel',
       'avatarUrl': 'https://example.com/avatar1.jpg',
-      'audioUrl': 'https://example.com/audio1.mp3',
+      'audioUrl': "https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8",
       'type': 'audio',
     },
     {
@@ -153,24 +154,36 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
-  void _navigateToPlayer(Map<String, dynamic> item) {
-    if (item['type'] == 'video') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => VideoPlayerPage(
-            title: item['title'],
-            subtitle: item['subtitle'],
-            thumbnailUrl: item['thumbnailUrl'],
-            videoUrl: item['videoUrl'] ?? 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
-          ),
+  // In home_screen.dart, update the _navigateToPlayer method:
+void _navigateToPlayer(Map<String, dynamic> item) {
+  if (item['type'] == 'video') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(
+          title: item['title'],
+          subtitle: item['subtitle'],
+          thumbnailUrl: item['thumbnailUrl'],
+          videoUrl: item['videoUrl'] ?? 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
         ),
-      );
-    } else {
-      // TODO: Navigate to Audio Player Page
-      print('Audio tapped: ${item['title']}');
-    }
+      ),
+    );
+  } else {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AudioPlayerPage(
+          title: item['title'],
+          subtitle: item['subtitle'],
+          description: 'This is a detailed description of the audio content. '
+              'It provides information about the topic, duration, and other relevant details '
+              'that users might find interesting before listening to the audio.',
+          audioUrl: 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
+        ),
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
