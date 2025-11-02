@@ -5,7 +5,7 @@ import 'package:msp_mobile/models/category.dart';
 import 'package:msp_mobile/models/media.dart';
 import 'package:msp_mobile/repositories/category_repository.dart';
 import 'package:msp_mobile/repositories/media_repository.dart';
-import 'package:msp_mobile/screens/audio_player.dart';
+//import 'package:msp_mobile/screens/audio_player.dart';
 import 'package:msp_mobile/screens/video-player-page.dart';
 import 'package:msp_mobile/screens/video_list_page.dart';
 import 'package:msp_mobile/widgets/card.dart';
@@ -21,15 +21,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-late TabController _tabController;
+//final TabController _tabController = TabController(length: 2, vsync: this);
 List<Category> categories = [];
 List<Media> allMedia = [];
 
-@override
-void initState() {
-  super.initState();
+ late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
   _fetchData();
-}
+  }
 
 Future<void> _fetchData() async {
   try {
@@ -41,23 +44,24 @@ Future<void> _fetchData() async {
       allMedia = mediaList;
     });
   } catch (e) {
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error fetching data: $e')),
     );
   }
 }
 
-  Future<void> _refreshData() async {
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() {});
+  // Future<void> _refreshData() async {
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   setState(() {});
     
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Content updated'),
-        duration: Duration(seconds: 1),
-      ),
-    );
-  }
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text('Content updated'),
+  //       duration: Duration(seconds: 1),
+  //     ),
+  //   );
+  // }
 
   void _navigateToVideoListPage(String title, List<Media> videos) {
     Navigator.push(
@@ -71,35 +75,35 @@ Future<void> _fetchData() async {
     );
   }
 
-  void _navigateToPlayer(Map<String, dynamic> item) {
-  if (item['type'] == 'video') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(
-          title: item['title'],
-          subtitle: item['subtitle'],
-          thumbnailUrl: item['thumbnailUrl'],
-          videoUrl: item['videoUrl'] ?? 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
-        ),
-      ),
-    );
-  } else {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AudioPlayerPage(
-          title: item['title'],
-          subtitle: item['subtitle'],
-          description: 'This is a detailed description of the audio content. '
-              'It provides information about the topic, duration, and other relevant details '
-              'that users might find interesting before listening to the audio.',
-          audioUrl: 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
-        ),
-      ),
-    );
-  }
-}
+//   void _navigateToPlayer(Map<String, dynamic> item) {
+//   if (item['type'] == 'video') {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => VideoPlayerPage(
+//           title: item['title'],
+//           subtitle: item['subtitle'],
+//           thumbnailUrl: item['thumbnailUrl'],
+//           videoUrl: item['videoUrl'] ?? 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
+//         ),
+//       ),
+//     );
+//   } else {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => AudioPlayerPage(
+//           title: item['title'],
+//           subtitle: item['subtitle'],
+//           description: 'This is a detailed description of the audio content. '
+//               'It provides information about the topic, duration, and other relevant details '
+//               'that users might find interesting before listening to the audio.',
+//           audioUrl: 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 List<Media> _getVideosByCategory(String categoryId) {
   return allMedia.where((media) => media.categoryId == categoryId).toList();
@@ -179,7 +183,7 @@ List<Media> _getVideosByCategory(String categoryId) {
               Row(
                 children: [
                     
-                    Icon(icon, size: 20, color: Colors.deepPurple),
+                    Icon(icon, size: 20, color: Color(0xFFE7000B)),
                   // Icon(icon, size: 20, color: Theme.of(context).colorScheme.background),
                   const SizedBox(width: 8),
                   Text(
@@ -243,104 +247,104 @@ List<Media> _getVideosByCategory(String categoryId) {
     );
   }
 
-  Widget _buildAudioCard(Map<String, dynamic> audio) {
-    return Card(
-      elevation: 2,
-      color: Theme.of(context).cardTheme.color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => _navigateToPlayer(audio),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Audio thumbnail placeholder - smaller and centered
-              Container(
-                width: double.infinity,
-                height: 60, // Reduced height
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.audiotrack,
-                      size: 30, // Smaller icon
-                      color: Colors.deepPurple,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'AUDIO',
-                      style: TextStyle(
-                        color: Colors.deepPurple,
-                        fontSize: 10, // Smaller font
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+  // Widget _buildAudioCard(Map<String, dynamic> audio) {
+  //   return Card(
+  //     elevation: 2,
+  //     color: Theme.of(context).cardTheme.color,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     child: InkWell(
+  //       borderRadius: BorderRadius.circular(12),
+  //       onTap: () => _navigateToPlayer(audio),
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(12),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             // Audio thumbnail placeholder - smaller and centered
+  //             Container(
+  //               width: double.infinity,
+  //               height: 60, // Reduced height
+  //               decoration: BoxDecoration(
+  //                 color: Colors.deepPurple.withOpacity(0.1),
+  //                 borderRadius: BorderRadius.circular(8),
+  //               ),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Icon(
+  //                     Icons.audiotrack,
+  //                     size: 30, // Smaller icon
+  //                     color: Colors.deepPurple,
+  //                   ),
+  //                   const SizedBox(height: 4),
+  //                   Text(
+  //                     'AUDIO',
+  //                     style: TextStyle(
+  //                       color: Colors.deepPurple,
+  //                       fontSize: 10, // Smaller font
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
               
-              const SizedBox(height: 8),
+  //             const SizedBox(height: 8),
               
-              // Title with better overflow handling
-              Expanded(
-                child: Text(
-                  audio['title'],
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13, // Smaller font for better fit
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
+  //             // Title with better overflow handling
+  //             Expanded(
+  //               child: Text(
+  //                 audio['title'],
+  //                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
+  //                   fontWeight: FontWeight.w600,
+  //                   fontSize: 13, // Smaller font for better fit
+  //                 ),
+  //                 maxLines: 2,
+  //                 overflow: TextOverflow.ellipsis,
+  //               ),
+  //             ),
               
-              const SizedBox(height: 4),
+  //             const SizedBox(height: 4),
               
-              // Subtitle and duration
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      audio['subtitle'],
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      audio['duration'],
-                      style: const TextStyle(
-                        fontSize: 10, // Smaller font
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  //             // Subtitle and duration
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 Expanded(
+  //                   child: Text(
+  //                     audio['subtitle'],
+  //                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
+  //                       color: Colors.grey[600],
+  //                     ),
+  //                     maxLines: 1,
+  //                     overflow: TextOverflow.ellipsis,
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.grey[200],
+  //                     borderRadius: BorderRadius.circular(4),
+  //                   ),
+  //                   child: Text(
+  //                     audio['duration'],
+  //                     style: const TextStyle(
+  //                       fontSize: 10, // Smaller font
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildBottomNavigationBar() {
   return Container(
@@ -358,12 +362,12 @@ List<Media> _getVideosByCategory(String categoryId) {
             destinations: const [
               NavigationDestination(
                 icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
+               // selectedIcon: Icon(Icons.home),
                 label: 'Home',
               ),
               NavigationDestination(
                 icon: Icon(Icons.person_outline),
-                selectedIcon: Icon(Icons.person),
+               // selectedIcon: Icon(Icons.person),
                 label: 'Profile',
               ),
             ],
@@ -376,19 +380,28 @@ List<Media> _getVideosByCategory(String categoryId) {
           top: -5, // Much higher positioning
           child: GestureDetector(
             onTap: () {
-              // Handle the middle button tap
-              print('Middle button tapped!');
-              // Add your functionality here
-            },
+    // Navigate to VideoPlayerPage when video is tapped
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(
+          title: "",
+          subtitle: "",
+          thumbnailUrl: "",
+          videoUrl: "https://462dx4mlqj3o-hls-live.wmncdn.net/jnvisiontv/0e1fd802947a734b3af7787436f11588.sdp/chunks.m3u8",
+        ),
+      ),
+    );
+  },
             child: Container(
               width: 70,
               height: 70,
               decoration: BoxDecoration(
-                color: Colors.deepPurple,
+                color: Color(0xFFE7000B),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.deepPurple.withOpacity(0.4),
+                    color: Color(0xFFE7000B).withOpacity(0.4),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),

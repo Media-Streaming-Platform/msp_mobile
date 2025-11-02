@@ -5,7 +5,7 @@ import 'package:msp_mobile/screens/video-player-page.dart';
 import 'package:msp_mobile/widgets/card.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -94,13 +94,11 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text('Profile'),
         elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         actions: [
           IconButton(
             icon: Icon(Icons.settings_outlined),
             onPressed: () {
-              // Navigate to settings page
-              print('Settings pressed');
             },
           ),
         ],
@@ -141,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(),
             blurRadius: 10,
             offset: Offset(0, 4),
           ),
@@ -204,8 +202,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () {
-                    // Edit profile action
-                    print('Edit profile pressed');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurple,
@@ -246,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(),
             blurRadius: 10,
             offset: Offset(0, 4),
           ),
@@ -286,7 +282,7 @@ class _ProfilePageState extends State<ProfilePage> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: Colors.deepPurple.withOpacity(0.1),
+            color: Colors.deepPurple.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -422,10 +418,10 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         VideoThumbnailCard(
           thumbnailUrl: video['thumbnailUrl'],
-          duration: video['duration'],
+         // duration: video['duration'],
           title: video['title'],
           subtitle: video['subtitle'],
-          avatarUrl: video['avatarUrl'],
+         // avatarUrl: video['avatarUrl'],
           onTap: () => _navigateToVideoPlayer(video),
         ),
         
@@ -438,7 +434,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Container(
               padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
+                color: Colors.black.withValues(alpha: 0.7),
                 shape: BoxShape.circle,
               ),
               child: Icon(

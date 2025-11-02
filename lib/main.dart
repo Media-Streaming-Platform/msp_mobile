@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           description: "Light Theme",
           data: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple, 
+              seedColor: Color(0xFFE7000B), 
               brightness: Brightness.light,
             ),
             useMaterial3: true,
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
           id: "dark", 
           description: "Dark Theme",
           data: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurpleAccent, 
+           colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(0xFFE7000B), // <-- Correct format
               brightness: Brightness.dark,
             ),
             useMaterial3: true,
@@ -41,9 +41,9 @@ class MyApp extends StatelessWidget {
       child: ThemeConsumer(
         child: Builder(
           builder: (themeContext) => MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Faith Stream',
             theme: ThemeProvider.themeOf(themeContext).data,
-            home: const MyHomePage(title: 'Flutter Demo'),
+            home: const MyHomePage(title: 'Faith Stream'),
             debugShowCheckedModeBanner: false,
           ),
         ),
