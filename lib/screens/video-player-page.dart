@@ -146,22 +146,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        title: widget.title != null
-            ? Text(
-                widget.title!,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-            : const Text('Video Player'),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.black,
+      //   foregroundColor: Colors.white,
+      //   elevation: 0,
+      //   title: widget.title != null
+      //       ? Text(
+      //           widget.title!,
+      //           style: const TextStyle(
+      //             color: Colors.white,
+      //             fontSize: 16,
+      //           ),
+      //           maxLines: 1,
+      //           overflow: TextOverflow.ellipsis,
+      //         )
+      //       : const Text('Video Player'),
+      // ),
       body: Stack(
         children: [
           _buildVideoContent(),

@@ -7,6 +7,7 @@ import 'package:msp_mobile/repositories/category_repository.dart';
 import 'package:msp_mobile/repositories/media_repository.dart';
 //import 'package:msp_mobile/screens/audio_player.dart';
 import 'package:msp_mobile/screens/video-player-page.dart';
+import 'package:msp_mobile/screens/video_and_web_tabs.dart';
 import 'package:msp_mobile/screens/video_list_page.dart';
 import 'package:msp_mobile/widgets/card.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -115,19 +116,19 @@ List<Media> _getVideosByCategory(String categoryId) {
         title: Text(widget.title),
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.background,
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(
-              icon: Icon(Icons.video_library),
-              text: 'Video',
-            ),
-            Tab(
-              icon: Icon(Icons.audiotrack),
-              text: 'Audio',
-            ),
-          ],
-        ),
+        // bottom: TabBar(
+        //   controller: _tabController,
+        //   tabs: const [
+        //     Tab(
+        //       icon: Icon(Icons.video_library),
+        //       text: 'Video',
+        //     ),
+        //     // Tab(
+        //     //   icon: Icon(Icons.audiotrack),
+        //     //   text: 'Audio',
+        //     // ),
+        //   ],
+        // ),
         actions: [
           IconButton(
             icon: const Icon(Icons.brightness_6),
@@ -211,7 +212,7 @@ List<Media> _getVideosByCategory(String categoryId) {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            itemCount: allMedia.length,
+            itemCount: videos.length,
             itemBuilder: (context, index) {
               final video = videos[index];
               return SizedBox(
@@ -384,12 +385,12 @@ List<Media> _getVideosByCategory(String categoryId) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(
-          title: "",
-          subtitle: "",
-          thumbnailUrl: "",
+        builder: (context) =>  VideoAndWebTabsPage(
+        title: 'Live Streams',
           videoUrl: "https://462dx4mlqj3o-hls-live.wmncdn.net/jnvisiontv/0e1fd802947a734b3af7787436f11588.sdp/chunks.m3u8",
-        ),
+        webUrl: 'https://unprorogued-unformalistic-macie.ngrok-free.dev/live/stream/',
+        // webUrl: 'https://example.com', // whatever you need
+      )
       ),
     );
   },
