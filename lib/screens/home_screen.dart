@@ -176,7 +176,9 @@ List<Media> _getVideosByCategory(String categoryId) {
             children: [
               Row(
                 children: [
-                  Icon(icon, size: 20, color: Colors.deepPurple),
+                    
+                    Icon(icon, size: 20, color: Colors.deepPurple),
+                  // Icon(icon, size: 20, color: Theme.of(context).colorScheme.background),
                   const SizedBox(width: 8),
                   Text(
                     title,
@@ -205,9 +207,10 @@ List<Media> _getVideosByCategory(String categoryId) {
               return SizedBox(
                 width: 280,
                 child: VideoThumbnailCard(
-  thumbnailUrl: video.thumbnail!,
+  thumbnailUrl:  video.thumbnail ?? 'https://example.com/default_thumbnail.png',
+ 
   title: video.title,
-  subtitle: video.description!,
+  subtitle: video.description?? "",
   //avatarUrl: video.ava,
   onTap: () {
     // Navigate to VideoPlayerPage when video is tapped
@@ -269,10 +272,19 @@ List<Media> _getVideosByCategory(String categoryId) {
           top: -5, // Much higher positioning
           child: GestureDetector(
             onTap: () {
-              // Handle the middle button tap
-              print('Middle button tapped!');
-              // Add your functionality here
-            },
+    // Navigate to VideoPlayerPage when video is tapped
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(
+          title: "Live Stream",
+          subtitle: "",
+          thumbnailUrl: "",
+          videoUrl: "https://462dx4mlqj3o-hls-live.wmncdn.net/jnvisiontv/0e1fd802947a734b3af7787436f11588.sdp/chunks.m3u8",
+        ),
+      ),
+    );
+  },
             child: Container(
               width: 70,
               height: 70,

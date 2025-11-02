@@ -39,7 +39,7 @@ class _VideoListPageState extends State<VideoListPage> {
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
           child: VideoThumbnailCard(
-            thumbnailUrl: video.thumbnail!,
+            thumbnailUrl: video.thumbnail ?? 'https://example.com/default_thumbnail.png',
            // duration: video['duration'],
             title: video.title,
             subtitle: video.description!,
