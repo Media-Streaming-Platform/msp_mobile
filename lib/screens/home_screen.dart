@@ -1,8 +1,11 @@
+// [file name]: home_screen.dart
+// [file content begin]
 import 'package:flutter/material.dart';
 import 'package:msp_mobile/models/category.dart';
 import 'package:msp_mobile/models/media.dart';
 import 'package:msp_mobile/repositories/category_repository.dart';
 import 'package:msp_mobile/repositories/media_repository.dart';
+import 'package:msp_mobile/screens/audio_player.dart';
 import 'package:msp_mobile/screens/video-player-page.dart';
 import 'package:msp_mobile/screens/video_list_page.dart';
 import 'package:msp_mobile/widgets/card.dart';
@@ -17,58 +20,14 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  // Sample data for different sections
-  // final List<Map<String, dynamic>> popularVideos = [
-  //   {
-  //     'thumbnailUrl': 'https://i.pinimg.com/1200x/67/51/ee/6751ee91b9d874d4ebf717a7c251667f.jpg',
-  //     'duration': '10:30',
-  //     'title': 'Flutter Tutorial - Building Beautiful UIs',
-  //     'subtitle': 'Flutter Channel',
-  //     'avatarUrl': 'https://example.com/avatar1.jpg',
-  //   },
-  //   {
-  //     'thumbnailUrl': 'https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=500',
-  //     'duration': '15:45',
-  //     'title': 'Dart Programming Masterclass',
-  //     'subtitle': 'Dart Masters',
-  //     'avatarUrl': 'https://example.com/avatar2.jpg',
-  //   },
-  //   {
-  //     'thumbnailUrl': 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500',
-  //     'duration': '22:10',
-  //     'title': 'Firebase Integration in Flutter',
-  //     'subtitle': 'Firebase Experts',
-  //     'avatarUrl': 'https://example.com/avatar3.jpg',
-  //   },
-  // ];
-
-  // final List<Map<String, dynamic>> trendingVideos = [
-  //   {
-  //     'thumbnailUrl': 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=500',
-  //     'duration': '12:15',
-  //     'title': 'Advanced Animations in Flutter',
-  //     'subtitle': 'Animation Pro',
-  //     'avatarUrl': 'https://example.com/avatar5.jpg',
-  //   },
-  //   {
-  //     'thumbnailUrl': 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=500',
-  //     'duration': '25:30',
-  //     'title': 'Building a Complete E-commerce App',
-  //     'subtitle': 'App Builders',
-  //     'avatarUrl': 'https://example.com/avatar6.jpg',
-  //   },
-  // ];
-  //List<Category> categories = [];
-
-  List<Category> categories = [];
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+late TabController _tabController;
+List<Category> categories = [];
 List<Media> allMedia = [];
 
 @override
 void initState() {
   super.initState();
-  // final categoryRepository = ;
-  // final mediaRepository = MediaRepository(baseUrl: 'https://your-api.com/api');
   _fetchData();
 }
 
@@ -106,11 +65,41 @@ Future<void> _fetchData() async {
       MaterialPageRoute(
         builder: (context) => VideoListPage(
           title: title,
-          videos: videos,
+          videos: allMedia,
         ),
       ),
     );
   }
+
+  void _navigateToPlayer(Map<String, dynamic> item) {
+  if (item['type'] == 'video') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(
+          title: item['title'],
+          subtitle: item['subtitle'],
+          thumbnailUrl: item['thumbnailUrl'],
+          videoUrl: item['videoUrl'] ?? 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
+        ),
+      ),
+    );
+  } else {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AudioPlayerPage(
+          title: item['title'],
+          subtitle: item['subtitle'],
+          description: 'This is a detailed description of the audio content. '
+              'It provides information about the topic, duration, and other relevant details '
+              'that users might find interesting before listening to the audio.',
+          audioUrl: 'https://pub-e0bdd32b9eeb4a6d8a15fb9bf208a93e.r2.dev/08_28/index.m3u8',
+        ),
+      ),
+    );
+  }
+}
 
 List<Media> _getVideosByCategory(String categoryId) {
   return allMedia.where((media) => media.categoryId == categoryId).toList();
@@ -122,17 +111,26 @@ List<Media> _getVideosByCategory(String categoryId) {
         title: Text(widget.title),
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.background,
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(
+              icon: Icon(Icons.video_library),
+              text: 'Video',
+            ),
+            Tab(
+              icon: Icon(Icons.audiotrack),
+              text: 'Audio',
+            ),
+          ],
+        ),
         actions: [
           IconButton(
-  icon: const Icon(Icons.brightness_6),
-  onPressed: () {
-    ThemeProvider.controllerOf(context).nextTheme();
-  },
-),
-          // IconButton(
-          //   icon: const Icon(Icons.notifications_outlined),
-          //   onPressed: () {},
-          // ),
+            icon: const Icon(Icons.brightness_6),
+            onPressed: () {
+              ThemeProvider.controllerOf(context).nextTheme();
+            },
+          ),
         ],
       ),
      body: RefreshIndicator(
@@ -145,10 +143,11 @@ List<Media> _getVideosByCategory(String categoryId) {
               final videos = _getVideosByCategory(category.id!);
               if (videos.isEmpty) return const SizedBox(); // skip empty categories
 
-              return _buildVideoSection(
+              return _buildMediaSection(
                 title: category.name,
                 videos: videos,
                 icon: Icons.video_library,
+                isAudio: false,
               );
             }).toList(),
           ),
@@ -159,13 +158,16 @@ List<Media> _getVideosByCategory(String categoryId) {
     );
   }
 
-
-
-  Widget _buildVideoSection({
+  Widget _buildMediaSection({
     required String title,
     required List<Media> videos,
     required IconData icon,
+    required bool isAudio,
   }) {
+    // Calculate responsive height based on screen size
+    final screenHeight = MediaQuery.of(context).size.height;
+    final cardHeight = screenHeight * (isAudio ? 0.22 : 0.28); // 22% for audio, 28% for video
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -189,19 +191,23 @@ List<Media> _getVideosByCategory(String categoryId) {
                 ],
               ),
               TextButton(
-                onPressed: () => _navigateToVideoListPage(title, videos),
+                onPressed: () => _navigateToVideoListPage(title, allMedia),
                 child: const Text('See All'),
               ),
             ],
           ),
         ),
         
-        SizedBox(
-          height: 220,
+        // Use ConstrainedBox instead of SizedBox for better overflow handling
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: cardHeight,
+            minHeight: isAudio ? 150 : 180, // Minimum heights
+          ),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            itemCount: videos.length,
+            itemCount: allMedia.length,
             itemBuilder: (context, index) {
               final video = videos[index];
               return SizedBox(
@@ -237,7 +243,105 @@ List<Media> _getVideosByCategory(String categoryId) {
     );
   }
 
-  
+  Widget _buildAudioCard(Map<String, dynamic> audio) {
+    return Card(
+      elevation: 2,
+      color: Theme.of(context).cardTheme.color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => _navigateToPlayer(audio),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Audio thumbnail placeholder - smaller and centered
+              Container(
+                width: double.infinity,
+                height: 60, // Reduced height
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.audiotrack,
+                      size: 30, // Smaller icon
+                      color: Colors.deepPurple,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'AUDIO',
+                      style: TextStyle(
+                        color: Colors.deepPurple,
+                        fontSize: 10, // Smaller font
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 8),
+              
+              // Title with better overflow handling
+              Expanded(
+                child: Text(
+                  audio['title'],
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13, // Smaller font for better fit
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              
+              const SizedBox(height: 4),
+              
+              // Subtitle and duration
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      audio['subtitle'],
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      audio['duration'],
+                      style: const TextStyle(
+                        fontSize: 10, // Smaller font
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBottomNavigationBar() {
   return Container(
     height: 90, // Increased height to give more space for floating
@@ -272,19 +376,10 @@ List<Media> _getVideosByCategory(String categoryId) {
           top: -5, // Much higher positioning
           child: GestureDetector(
             onTap: () {
-    // Navigate to VideoPlayerPage when video is tapped
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(
-          title: "Live Stream",
-          subtitle: "",
-          thumbnailUrl: "",
-          videoUrl: "https://462dx4mlqj3o-hls-live.wmncdn.net/jnvisiontv/0e1fd802947a734b3af7787436f11588.sdp/chunks.m3u8",
-        ),
-      ),
-    );
-  },
+              // Handle the middle button tap
+              print('Middle button tapped!');
+              // Add your functionality here
+            },
             child: Container(
               width: 70,
               height: 70,
